@@ -2677,3 +2677,47 @@ body.premium-site.uniform-page-bg::before {
     height: 24px;
   }
 }
+
+/* --- Іконки в стилі сайту (замість емодзі) --- */
+.premium-site .icon {
+  width: 1em;
+  height: 1em;
+  flex: none;
+  display: inline-block;
+  vertical-align: -0.14em;
+}
+
+.premium-site .btn .icon {
+  width: 1.05em;
+  height: 1.05em;
+  margin-right: 9px;
+  opacity: 0.92;
+}
+
+.premium-site .form-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 18px;
+}
+
+.premium-site .form-meta .meta-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+}
+
+.premium-site .form-meta .icon {
+  width: 15px;
+  height: 15px;
+  color: var(--accent);
+}
+
+.premium-site.theme-night .form-meta .icon {
+  color: var(--accent-2);
+}
+
+.premium-site .floating-cta {
+  color: #fffaf3;
+}

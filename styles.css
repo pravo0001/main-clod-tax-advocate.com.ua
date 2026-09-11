@@ -2721,3 +2721,38 @@ body.premium-site.uniform-page-bg::before {
 .premium-site .floating-cta {
   color: #fffaf3;
 }
+
+/* --- Safari на iOS: вкладені backdrop-filter інколи малюються суцільною світлою плямою,
+   через що текст у картках зникав. Даємо кожній «скляній» панелі непрозору основу. --- */
+.premium-site .hero-copy,
+.premium-site .hero-visual,
+.premium-site .panel,
+.premium-site .social-preview,
+.premium-site .faq-card,
+.premium-site .contact-card,
+.premium-site .article-wrap,
+.premium-site .stat-card,
+.premium-site .service-card,
+.premium-site .case-card,
+.premium-site .testimonial-card,
+.premium-site .trust-card,
+.premium-site .resource-card,
+.premium-site .blog-card {
+  background-color: var(--bg-soft);
+  background-image: linear-gradient(var(--surface), var(--surface));
+  -webkit-backdrop-filter: blur(18px);
+}
+
+.premium-site .hero-visual .trust-card,
+.premium-site .hero-proof .trust-card {
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+.premium-site .section-dark .trust-card,
+.premium-site .section-dark .panel,
+.premium-site .section-dark .spotlight-panel {
+  background-color: var(--surface-dark);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}

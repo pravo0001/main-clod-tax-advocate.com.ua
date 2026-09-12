@@ -1,7 +1,6 @@
 /**
- * Фронтенд-бандл: тема, меню, конверсії Google Ads, форма заявки.
- * Форма: якщо заданий FORM_ENDPOINT (Cloudflare Worker), заявка йде через нього і токен бота
- * у браузер не потрапляє. Поки FORM_ENDPOINT порожній — використовується пряма відправка в Telegram.
+ * Фронтенд-бандл: тема, меню, реклама (gtag), форма заявки → Telegram.
+ * Безпека: токен Telegram-бота у видимому JS доступний усім відвідувачам — для бойового середовища краще проксі через сервер / serverless.
  */
 const CURRENT_YEAR = new Date().getFullYear().toString();
 const THEME_MODE_KEY = "site-theme-mode";
@@ -140,10 +139,7 @@ if (menuToggle instanceof HTMLButtonElement && menu instanceof HTMLElement) {
 const GOOGLE_ADS_CONVERSION_SEND_TO = "AW-18141894337/8hzzCIHYgqkcEMGt3cpD";
 
 window.gtag_report_conversion = function gtag_report_conversion(url, openInNewTab) {
-  let done = false;
   const callback = function () {
-    if (done) return;
-    done = true;
     if (typeof url === "undefined") return;
     if (openInNewTab) {
       window.open(url, "_blank", "noopener,noreferrer");
@@ -155,30 +151,21 @@ window.gtag_report_conversion = function gtag_report_conversion(url, openInNewTa
     callback();
     return false;
   }
-  try {
-    gtag("event", "conversion", {
-      send_to: GOOGLE_ADS_CONVERSION_SEND_TO,
-      transport_type: "beacon",
-      event_callback: callback,
-      event_timeout: 800,
-    });
-  } catch {
-    // ignore
-  }
-  // Запасний варіант: якщо gtag.js заблоковано (AdBlock, Brave), callback не прийде ніколи.
-  window.setTimeout(callback, 900);
+  gtag("event", "conversion", {
+    send_to: GOOGLE_ADS_CONVERSION_SEND_TO,
+    event_callback: callback,
+  });
   return false;
 };
 
-const reportContactConversion = () => {
-  if (typeof gtag !== "function") return;
+const getAdsNavigationUrl = (anchor) => {
+  if (!(anchor instanceof HTMLAnchorElement)) return "";
+  const hrefAttr = anchor.getAttribute("href");
+  if (hrefAttr == null || hrefAttr === "") return "";
   try {
-    gtag("event", "conversion", {
-      send_to: GOOGLE_ADS_CONVERSION_SEND_TO,
-      transport_type: "beacon",
-    });
+    return new URL(hrefAttr, window.location.href).href;
   } catch {
-    // ignore
+    return "";
   }
 };
 
@@ -208,15 +195,17 @@ document.addEventListener(
     const anchor = event.target instanceof Element ? event.target.closest("a[href]") : null;
     if (!(anchor instanceof HTMLAnchorElement)) return;
     if (!isPhoneOrMessengerContactLink(anchor) && !isConsultationFloatingCta(anchor)) return;
-    // Посилання відкривається одразу; подія конверсії відправляється паралельно (beacon).
-    reportContactConversion();
+    const targetUrl = getAdsNavigationUrl(anchor);
+    if (!targetUrl) return;
+    event.preventDefault();
+    const openInNewTab = anchor.target === "_blank";
+    gtag_report_conversion(targetUrl, openInNewTab);
   },
   true,
 );
 
 const PHONE_PREFIX = "+380";
-const FORM_ENDPOINT = "";
-const TELEGRAM_BOT_TOKEN = "";
+const TELEGRAM_BOT_TOKEN = "8556207665:AAF-6bJnbwQOREkA3jAqFiAVmqQTFumiUgY";
 const TELEGRAM_CHAT_ID = "1262055797";
 const SPAM_MIN_FILL_MS = 3500;
 const SPAM_COOLDOWN_MS = 120000;
@@ -417,8 +406,8 @@ document.querySelectorAll("[data-consultation-form]").forEach((form) => {
       return;
     }
 
-    if (!FORM_ENDPOINT && (!TELEGRAM_BOT_TOKEN || !TELEGRAM_CHAT_ID)) {
-      note.textContent = "Не вдалося надіслати заявку. Зателефонуйте, будь ласка, або напишіть у месенджер.";
+    if (!TELEGRAM_BOT_TOKEN || !TELEGRAM_CHAT_ID) {
+      note.textContent = "Форма не налаштована: додайте токен Telegram-бота та chat id у script.js.";
       return;
     }
 
@@ -434,20 +423,14 @@ document.querySelectorAll("[data-consultation-form]").forEach((form) => {
     ].join("\n");
 
     try {
-      const response = FORM_ENDPOINT
-        ? await fetch(FORM_ENDPOINT, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ name, phone, message, page: window.location.href, website }),
-          })
-        : await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              chat_id: TELEGRAM_CHAT_ID,
-              text,
-            }),
-          });
+      const response = await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          chat_id: TELEGRAM_CHAT_ID,
+          text,
+        }),
+      });
 
       let payload = null;
       try {
@@ -459,7 +442,7 @@ document.querySelectorAll("[data-consultation-form]").forEach((form) => {
       if (!response.ok) {
         const description = payload && typeof payload === "object" && "description" in payload
           ? String(payload.description)
-          : "помилка сервера";
+          : "Telegram API error";
         throw new Error(description);
       }
 
@@ -471,8 +454,8 @@ document.querySelectorAll("[data-consultation-form]").forEach((form) => {
         phoneInput.value = PHONE_PREFIX;
       }
     } catch (error) {
-      console.error(error);
-      note.textContent = "Не вдалося надіслати заявку. Зателефонуйте, будь ласка, або напишіть у месенджер.";
+      const reason = error instanceof Error ? error.message : "невідома помилка";
+      note.textContent = `Не вдалося надіслати заявку: ${reason}.`;
     }
   });
 });

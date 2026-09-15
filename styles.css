@@ -794,7 +794,10 @@ textarea:focus {
 }
 
 .article-wrap {
+  width: 100%;
   max-width: 840px;
+  margin-left: auto;
+  margin-right: auto;
   background: linear-gradient(180deg, var(--surface) 0%, var(--surface-2) 100%);
   border: 1px solid var(--border);
   border-radius: 16px;

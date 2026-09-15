@@ -1,6 +1,21 @@
 {
   "articles": [
     {
+      "slug": "perevirka-za-materialamy-beb-donarahuvannya-15-mln-ppr",
+      "date": "2026-09-15",
+      "topic": "ppr",
+      "title": "Понад 15 млн грн донарахувань після перевірки за матеріалами БЕБ: чого навчає кейс ДПС і як захищатися від ППР",
+      "source_urls": [
+        "https://tax.gov.ua/media-tsentr/novini/1050131.html",
+        "https://supreme.court.gov.ua/supreme/pres-centr/news/2094618/"
+      ],
+      "source_ids": [
+        "dps-news:1050131",
+        "sc-news:2094618",
+        "case:199/13500/25"
+      ]
+    },
+    {
       "slug": "zbytky-nereiestratsiia-pn-treteiskyi-sud-vs",
       "date": "2026-09-15",
       "topic": "pn-rk",

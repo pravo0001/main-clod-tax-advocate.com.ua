@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Публікація статті в блог сайту tax-advocate.com.ua (статичний сайт, GitHub Pages).
+Публікація статті в блог сайту taxlawyer.com.ua (статичний сайт, GitHub Pages).
 
 Використання:
     python3 tools/blog_publish.py article.json            # опублікувати
@@ -27,7 +27,7 @@ import sys
 from datetime import date
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-SITE = "https://tax-advocate.com.ua"
+SITE = "https://taxlawyer.com.ua"
 REGISTRY = os.path.join(ROOT, "blog", "published.json")
 
 TOPICS = {
@@ -163,7 +163,7 @@ def render_article(a):
         "datePublished": a["date"],
         "dateModified": a["date"],
         "author": {"@type": "Person", "name": "Андрій Глазунов"},
-        "publisher": {"@type": "Organization", "name": "tax-advocate.com.ua"},
+        "publisher": {"@type": "Organization", "name": "taxlawyer.com.ua"},
         "mainEntityOfPage": url,
     }
     sources_li = "\n".join(

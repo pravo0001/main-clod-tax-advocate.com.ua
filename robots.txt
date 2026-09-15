@@ -2,4 +2,4 @@ User-agent: *
 Allow: /
 
 # XML sitemap
-Sitemap: https://tax-advocate.com.ua/sitemap.xml
+Sitemap: https://taxlawyer.com.ua/sitemap.xml

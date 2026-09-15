@@ -1,0 +1,108 @@
+{
+  "articles": [
+    {
+      "slug": "zbytky-nereiestratsiia-pn-treteiskyi-sud-vs",
+      "date": "2026-09-15",
+      "topic": "pn-rk",
+      "title": "Збитки через незареєстровану податкову накладну не можна стягнути через третейський суд — Верховний Суд",
+      "source_urls": [
+        "https://so.supreme.court.gov.ua/news/2496/",
+        "http://reyestr.court.gov.ua/Review/138142694",
+        "https://t.me/supremecourtua/4331"
+      ],
+      "source_ids": [
+        "case:873/49/26",
+        "sc-news:2496",
+        "tg:supremecourtua/4331"
+      ]
+    },
+    {
+      "slug": "fiktyvnyi-kontragent",
+      "date": "2026-05-09",
+      "topic": "legacy",
+      "title": "Фіктивний контрагент: як захистити податковий кредит і витрати в 2026 році",
+      "source_urls": [],
+      "source_ids": []
+    },
+    {
+      "slug": "aresht-rahunkiv-dps",
+      "date": "2026-05-07",
+      "topic": "legacy",
+      "title": "Арешт рахунків ДПС: як зняти, оскаржити і не допустити в 2026 році",
+      "source_urls": [],
+      "source_ids": []
+    },
+    {
+      "slug": "rozblokuvannya-pn-rk",
+      "date": "2026-05-05",
+      "topic": "legacy",
+      "title": "Розблокування ПН/РК у 2026 році: покрокова інструкція",
+      "source_urls": [],
+      "source_ids": []
+    },
+    {
+      "slug": "spysannya-podatkovogo-borgu",
+      "date": "2026-05-01",
+      "topic": "legacy",
+      "title": "Списання податкового боргу: підстави, процедура і реальні сценарії 2026",
+      "source_urls": [],
+      "source_ids": []
+    },
+    {
+      "slug": "kryterii-ryzykovosti-platnyka",
+      "date": "2026-04-28",
+      "topic": "legacy",
+      "title": "Критерії ризиковості платника податку, операцій і позитивна податкова історія в 2026 році",
+      "source_urls": [],
+      "source_ids": []
+    },
+    {
+      "slug": "onlyfans-podatky-ukraina",
+      "date": "2026-03-07",
+      "topic": "legacy",
+      "title": "OnlyFans і податки в Україні: що робити, якщо ДПС перевіряє доходи",
+      "source_urls": [],
+      "source_ids": []
+    },
+    {
+      "slug": "article-1",
+      "date": "2026-02-15",
+      "topic": "legacy",
+      "title": "Податкове повідомлення-рішення: строки, скарга та перші кроки",
+      "source_urls": [],
+      "source_ids": []
+    },
+    {
+      "slug": "article-2",
+      "date": "2026-02-05",
+      "topic": "legacy",
+      "title": "Які документи зібрати до старту податкової перевірки",
+      "source_urls": [],
+      "source_ids": []
+    },
+    {
+      "slug": "article-3",
+      "date": "2026-01-28",
+      "topic": "legacy",
+      "title": "Запит ДПС: як відповідати без зайвого ризику",
+      "source_urls": [],
+      "source_ids": []
+    },
+    {
+      "slug": "article-4",
+      "date": "2026-01-20",
+      "topic": "legacy",
+      "title": "Де «ламається» документальна історія операції",
+      "source_urls": [],
+      "source_ids": []
+    },
+    {
+      "slug": "article-5",
+      "date": "2026-01-11",
+      "topic": "legacy",
+      "title": "Хто що робить у конфлікті з ДПС",
+      "source_urls": [],
+      "source_ids": []
+    }
+  ]
+}

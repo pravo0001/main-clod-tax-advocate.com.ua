@@ -2215,6 +2215,13 @@ body.blog-page.premium-site.theme-night .blog-feed-panel {
   color: var(--blog-brand-ink);
 }
 
+.premium-site .blog-per-select.is-active,
+.premium-site .blog-page-btn.is-active {
+  opacity: 1;
+  cursor: pointer;
+  color: var(--text-strong);
+}
+
 .premium-site .blog-feed-range {
   margin: 0;
   font-size: 0.88rem;

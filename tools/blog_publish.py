@@ -57,6 +57,20 @@ def fail(msg, code=2):
     sys.exit(code)
 
 
+_APOS_RE = re.compile("([А-ЯІЇЄҐа-яіїєґ])'(?=[А-ЯІЇЄҐа-яіїєґ])")
+
+
+def typo_apostrophe(v):
+    """Прямий апостроф між кириличними літерами -> типографський (’), як усюди на сайті."""
+    if isinstance(v, str):
+        return _APOS_RE.sub("\\1’", v)
+    if isinstance(v, list):
+        return [typo_apostrophe(x) for x in v]
+    if isinstance(v, dict):
+        return {k: typo_apostrophe(x) for k, x in v.items()}
+    return v
+
+
 def esc(s):
     return html.escape(str(s), quote=True)
 
@@ -376,7 +390,7 @@ def main():
     if not args:
         fail("вкажіть шлях до article.json", 1)
     with open(args[0], encoding="utf-8") as f:
-        a = json.load(f)
+        a = typo_apostrophe(json.load(f))
     validate(a)
     reg = load_registry()
     problems = check_duplicates(a, reg)

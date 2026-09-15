@@ -2721,10 +2721,11 @@ body.premium-site.uniform-page-bg::before {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  white-space: nowrap;
+  min-width: 0;
 }
 
 .premium-site .form-meta .icon {
+  flex-shrink: 0;
   width: 15px;
   height: 15px;
   color: var(--accent);

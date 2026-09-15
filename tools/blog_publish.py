@@ -314,7 +314,20 @@ def update_blog_index(a):
         fail("у blog.html не знайдено <ul class=\"blog-feed-list\">")
     if f'id="blog-{a["slug"]}"' in src:
         fail(f"картка blog-{a['slug']} уже є в blog.html")
-    src = src.replace(marker, marker + render_feed_item(a), 1)
+    # Картка вставляється за датою: перед першою наявною карткою з датою <= дати статті
+    # (нова стаття з найсвіжішою датою стає першою; стаття «заднім числом» — на своє місце в хронології).
+    item_re = re.compile(r'              <li class="blog-feed-item".*?</li>\n', re.S)
+    start = src.index(marker) + len(marker)
+    insert_at = None
+    for m in item_re.finditer(src, start):
+        dm = re.search(r'<time datetime="(\d{4}-\d{2}-\d{2})"', m.group(0))
+        if dm and dm.group(1) <= a["date"]:
+            insert_at = m.start()
+            break
+        insert_at = m.end()
+    if insert_at is None:
+        insert_at = start
+    src = src[:insert_at] + render_feed_item(a) + src[insert_at:]
     total = src.count('class="blog-feed-item"')
     # лічильники у футері стрічки
     src = re.sub(r'title="У каталозі зараз \d+ матеріалів"', f'title="У каталозі зараз {total} матеріалів"', src)
@@ -335,7 +348,9 @@ def update_sitemaps(a):
     entry = f"  <url>\n    <loc>{url}</loc>\n    <lastmod>{a['date']}</lastmod>\n  </url>\n"
     m = re.search(r"  <url>\n    <loc>https://[^<]+/blog\.html</loc>\n(?:    <lastmod>[^<]+</lastmod>\n)?  </url>\n", xml)
     if m:
-        blog_entry = re.sub(r"<lastmod>[^<]+</lastmod>", f"<lastmod>{a['date']}</lastmod>", m.group(0))
+        old = re.search(r"<lastmod>([^<]+)</lastmod>", m.group(0))
+        lastmod = max(a["date"], old.group(1)) if old else a["date"]
+        blog_entry = re.sub(r"<lastmod>[^<]+</lastmod>", f"<lastmod>{lastmod}</lastmod>", m.group(0))
         if "<lastmod>" not in blog_entry:
             blog_entry = blog_entry.replace("</loc>\n", f"</loc>\n    <lastmod>{a['date']}</lastmod>\n")
         xml = xml[:m.start()] + blog_entry + entry + xml[m.end():]
@@ -390,6 +405,8 @@ def main():
         "source_urls": news_source_urls(a),
         "source_ids": a["source_ids"],
     })
+    # реєстр упорядковано за датою (найновіші зверху); стабільне сортування зберігає порядок публікації в межах дати
+    reg["articles"].sort(key=lambda x: x.get("date", ""), reverse=True)
     save_registry(reg)
     print(f"Опубліковано: blog/{a['slug']}.html")
     print(f"Картку додано в blog.html (усього матеріалів: {total}); sitemap.xml/sitemap.txt оновлено; реєстр blog/published.json оновлено.")
